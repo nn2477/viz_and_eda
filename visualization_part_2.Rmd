@@ -258,6 +258,7 @@ what if i wanted densities for tmin and tmax simultaneously?
 
 ```{r}
 weather_df |>
+  select(name, tmax, tmin) |> 
   pivot_longer(
     tmax:tmin,
     names_to = "observation", 
@@ -265,7 +266,60 @@ weather_df |>
   ) %>% 
   ggplot(aes(x = temp, fill = observation)) +
   geom_density(alpha = .5) +
-  facet_grid(. ~ name)
+  facet_grid(~ name) + 
+  viridis::scale_fill_viridis(discrete = TRUE)
+```
+
+## revisit the pulse 
+
+```{r}
+pulse_data = 
+  haven::read_sas("./data/public_pulse_data.sas7bdat") %>% 
+  janitor::clean_names() %>% 
+  pivot_longer(
+    bdi_score_bl:bdi_score_12m,
+    names_to = "visit",
+    names_prefix = "bdi_score_",
+    values_to = "bdi") %>% 
+  select(id, visit, everything()) %>% 
+  mutate(
+    visit = recode(visit, "bl" = "00m"), 
+    visit = factor(visit, levels = str_c(c("00", "01", "06", "12"), "m"))) %>% 
+  arrange(id, visit)
+
+ggplot(pulse_data, aes(x = visit, y = bdi)) + 
+  geom_point()
+```
+
+## revisiting pups dataset 
+
+data from the FAS study 
+
+```{r}
+pups_df = 
+  read_csv("/Users/nhunguyen/Desktop/P8150/data_wrangling/data/FAS_pups.csv") %>% 
+  janitor::clean_names() %>% 
+  mutate(sex = recode(sex, `1` = "male", `2` = "female"))
+
+litters_df = 
+  read_csv("/Users/nhunguyen/Desktop/P8150/data_wrangling/data/FAS_litters.csv") %>% 
+  janitor::clean_names() %>% 
+  separate(group, into = c("dose", "day_of_tx"), sep = 3)
+
+fas_df = left_join(pups_df, litters_df, by = "litter_number")
+
+fas_df %>% 
+  select(dose, day_of_tx, starts_with("pd_")) %>% 
+  pivot_longer(
+    pd_ears:pd_walk,
+    names_to = "outcome",
+    values_to = "pn_day"
+  ) %>% 
+  drop_na() %>% 
+  mutate(outcome = forcats::fct_reorder(outcome, pn_day, median)) %>% 
+  ggplot(aes(x = dose, y = pn_day)) + 
+  geom_violin() +
+  facet_grid(day_of_tx ~ outcome)
 ```
 
 
