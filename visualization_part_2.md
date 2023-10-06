@@ -236,3 +236,49 @@ weather_df %>%
     ## Warning: Removed 17 rows containing missing values (`geom_point()`).
 
 ![](visualization_part_2_files/figure-gfm/unnamed-chunk-9-1.png)<!-- -->
+
+## setting options
+
+- put at the very beginning of rmarkdown file – makes sure that every
+  plot i make has the viridis color palate, the theme will be minimal,
+  and the legend will be at the bottom
+
+``` r
+library(tidyverse)
+
+knitr::opts_chunk$set(
+  fig.width = 6,
+  fig.asp = .6, 
+  out.width = "90%"
+)
+
+theme_set(theme_minimal() + theme(legend.position = "bottom"))
+
+options(
+  ggplot2.continuous.colour = "viridis", 
+  ggplot2.continuous.fill = "viridis"
+)
+
+scale_color_discrete = scale_color_viridis_d
+scale_fill_discrete = scale_fill_viridis_d
+```
+
+## data args in `geom`
+
+``` r
+central_park_df = 
+  weather_df |> 
+  filter(name == "CentralPark_NY")
+
+molokai_df = 
+  weather_df |> 
+  filter(name == "Molokai_HI")
+
+ggplot(data = molokai_df, aes(x = date, y = tmax, color = name)) +
+  geom_point() +
+  geom_line(data = central_park_df)
+```
+
+    ## Warning: Removed 1 rows containing missing values (`geom_point()`).
+
+![](visualization_part_2_files/figure-gfm/unnamed-chunk-11-1.png)<!-- -->
