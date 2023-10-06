@@ -106,6 +106,7 @@ weather_df %>%
     title = "temperature plot", 
     x = "minimum daily temperature (x)",
     y = "maximum daily temperature (y)", 
+    color = "location", 
     caption = "data from the rnoaa package: temperatures in 2017"
   )
 ```
@@ -113,3 +114,76 @@ weather_df %>%
     ## Warning: Removed 17 rows containing missing values (`geom_point()`).
 
 ![](visualization_part_2_files/figure-gfm/unnamed-chunk-4-1.png)<!-- -->
+
+## scales
+
+start with the same plot, x and y scale
+
+``` r
+weather_df %>% 
+  ggplot(aes(x = tmin, y = tmax, color = name)) + 
+  geom_point(alpha = .5) + 
+  labs(
+    title = "temperature plot", 
+    x = "minimum daily temperature (x)",
+    y = "maximum daily temperature (y)", 
+    color = "location", 
+    caption = "data from the rnoaa package: temperatures in 2017"
+  ) + 
+scale_x_continuous(
+  breaks = c(-15, 0, 15),
+  labels = c("-15º C", "0", "15")
+) + 
+scale_y_continuous(
+  trans = "sqrt"
+)
+```
+
+    ## Warning in self$trans$transform(x): NaNs produced
+
+    ## Warning: Transformation introduced infinite values in continuous y-axis
+
+    ## Warning: Removed 142 rows containing missing values (`geom_point()`).
+
+![](visualization_part_2_files/figure-gfm/unnamed-chunk-5-1.png)<!-- -->
+
+look at color scales
+
+``` r
+weather_df %>% 
+  ggplot(aes(x = tmin, y = tmax, color = name)) + 
+  geom_point(alpha = .5) + 
+  labs(
+    title = "temperature plot", 
+    x = "minimum daily temperature (x)",
+    y = "maximum daily temperature (y)", 
+    color = "location", 
+    caption = "data from the rnoaa package: temperatures in 2017"
+  ) + 
+  scale_color_hue(h = c(100, 300))
+```
+
+    ## Warning: Removed 17 rows containing missing values (`geom_point()`).
+
+![](visualization_part_2_files/figure-gfm/unnamed-chunk-6-1.png)<!-- -->
+
+``` r
+weather_df %>% 
+  ggplot(aes(x = tmin, y = tmax, color = name)) + 
+  geom_point(alpha = .5) + 
+  labs(
+    title = "temperature plot", 
+    x = "minimum daily temperature (x)",
+    y = "maximum daily temperature (y)", 
+    color = "location", 
+    caption = "data from the rnoaa package: temperatures in 2017"
+  ) + 
+  viridis::scale_color_viridis(
+    name = "Location", 
+    discrete = TRUE
+  )
+```
+
+    ## Warning: Removed 17 rows containing missing values (`geom_point()`).
+
+![](visualization_part_2_files/figure-gfm/unnamed-chunk-7-1.png)<!-- -->
