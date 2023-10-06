@@ -373,3 +373,61 @@ ridge plots are easier when you have a categorical predictor with 40+
 variables - ex: if you wanted to know what the age distribution looked
 like according to states, using box-plots or violin plots would be
 difficult to graph – ridge plots end up being a useful option
+
+## save and embed
+
+let’s save a scatterplot
+
+``` r
+weather_plot = 
+  weather_df %>% 
+  ggplot(aes(x = tmin, y = tmax, color = name)) + 
+  geom_point(alpha = .5)
+
+ggsave("./results/weather_plot.pdf", weather_plot, width = 8, height = 5)
+```
+
+    ## Warning: Removed 17 rows containing missing values (`geom_point()`).
+
+what about embedding? - are there ways we can control what specific
+figures look like?
+
+``` r
+weather_plot
+```
+
+    ## Warning: Removed 17 rows containing missing values (`geom_point()`).
+
+![](visualization_part_1_files/figure-gfm/unnamed-chunk-22-1.png)<!-- -->
+
+embed at different size
+
+``` r
+weather_plot
+```
+
+    ## Warning: Removed 17 rows containing missing values (`geom_point()`).
+
+![](visualization_part_1_files/figure-gfm/unnamed-chunk-23-1.png)<!-- -->
+
+- made same plot, but it looks different when we knit – WHY?
+  - first plot: we made the figure smaller but the points are the still
+    same
+
+we can also just set it so that every graph will have the same
+dimensions
+
+``` r
+knitr::opts_chunk$set(
+  fig.width = 6,
+  fig.asp = .6,
+  out.width = "90%"
+)
+
+ggplot(weather_df, aes(x = tmin, y = tmax)) + 
+  geom_point(aes(color = name))
+```
+
+    ## Warning: Removed 17 rows containing missing values (`geom_point()`).
+
+![](visualization_part_1_files/figure-gfm/unnamed-chunk-24-1.png)<!-- -->
