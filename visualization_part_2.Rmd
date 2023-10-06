@@ -232,5 +232,42 @@ tmax_date_p =
 (tmax_tmin_p + prcp_dens_p) / tmax_date_p
 ```
 
+## data manipulation 
+
+```{r}
+weather_df %>% 
+  ggplot(aes(x = name, y = tmax, fill = name)) + 
+  geom_violin(alpha = .5)
+```
+  - for character variables, R turns the names into factors (i.e. centralpark = 1) and then puts it in alphabetical order     - in order to put the labels in a different order, need to manipulate my data by using factors -- not a ggplot problem 
+  - mutate has turned the variable from character to factor 
+  
+control your factors
+  
+```{r}
+weather_df %>% 
+  mutate(
+    name = factor(name), 
+    name = forcats::fct_relevel(name, c("Molokai_HI"))
+  ) %>% 
+  ggplot(aes(x = name, y = tmax, fill = name)) + 
+  geom_violin(alpha = .5) 
+```
+
+what if i wanted densities for tmin and tmax simultaneously? 
+
+```{r}
+weather_df |>
+  pivot_longer(
+    tmax:tmin,
+    names_to = "observation", 
+    values_to = "temp"
+  ) %>% 
+  ggplot(aes(x = temp, fill = observation)) +
+  geom_density(alpha = .5) +
+  facet_grid(. ~ name)
+```
+
+
 
 

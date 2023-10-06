@@ -333,3 +333,54 @@ tmax_date_p =
     ## Removed 17 rows containing missing values (`geom_point()`).
 
 ![](visualization_part_2_files/figure-gfm/unnamed-chunk-13-1.png)<!-- -->
+
+## data manipulation
+
+``` r
+weather_df %>% 
+  ggplot(aes(x = name, y = tmax, fill = name)) + 
+  geom_violin(alpha = .5)
+```
+
+    ## Warning: Removed 17 rows containing non-finite values (`stat_ydensity()`).
+
+![](visualization_part_2_files/figure-gfm/unnamed-chunk-14-1.png)<!-- --> -
+for character variables, R turns the names into factors
+(i.e. centralpark = 1) and then puts it in alphabetical order - in order
+to put the labels in a different order, need to manipulate my data by
+using factors – not a ggplot problem - mutate has turned the variable
+from character to factor
+
+control your factors
+
+``` r
+weather_df %>% 
+  mutate(
+    name = factor(name), 
+    name = forcats::fct_relevel(name, c("Molokai_HI"))
+  ) %>% 
+  ggplot(aes(x = name, y = tmax, fill = name)) + 
+  geom_violin(alpha = .5) 
+```
+
+    ## Warning: Removed 17 rows containing non-finite values (`stat_ydensity()`).
+
+![](visualization_part_2_files/figure-gfm/unnamed-chunk-15-1.png)<!-- -->
+
+what if i wanted densities for tmin and tmax simultaneously?
+
+``` r
+weather_df |>
+  pivot_longer(
+    tmax:tmin,
+    names_to = "observation", 
+    values_to = "temp"
+  ) %>% 
+  ggplot(aes(x = temp, fill = observation)) +
+  geom_density(alpha = .5) +
+  facet_grid(. ~ name)
+```
+
+    ## Warning: Removed 34 rows containing non-finite values (`stat_density()`).
+
+![](visualization_part_2_files/figure-gfm/unnamed-chunk-16-1.png)<!-- -->
