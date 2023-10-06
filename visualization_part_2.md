@@ -187,3 +187,52 @@ weather_df %>%
     ## Warning: Removed 17 rows containing missing values (`geom_point()`).
 
 ![](visualization_part_2_files/figure-gfm/unnamed-chunk-7-1.png)<!-- -->
+
+## themes
+
+shift the legend
+
+``` r
+weather_df %>% 
+  ggplot(aes(x = tmin, y = tmax, color = name)) + 
+  geom_point(alpha = .5) + 
+  labs(
+    title = "temperature plot", 
+    x = "minimum daily temperature (x)",
+    y = "maximum daily temperature (y)", 
+    color = "location", 
+    caption = "data from the rnoaa package: temperatures in 2017"
+  ) + 
+  viridis::scale_color_viridis(
+    name = "Location", 
+    discrete = TRUE) + 
+  theme(legend.position = "bottom")
+```
+
+    ## Warning: Removed 17 rows containing missing values (`geom_point()`).
+
+![](visualization_part_2_files/figure-gfm/unnamed-chunk-8-1.png)<!-- -->
+
+change the overall theme
+
+``` r
+weather_df %>% 
+  ggplot(aes(x = tmin, y = tmax, color = name)) + 
+  geom_point(alpha = .5) + 
+  labs(
+    title = "temperature plot", 
+    x = "minimum daily temperature (x)",
+    y = "maximum daily temperature (y)", 
+    color = "location", 
+    caption = "data from the rnoaa package: temperatures in 2017"
+  ) + 
+  viridis::scale_color_viridis(
+    name = "Location", 
+    discrete = TRUE) + 
+  theme_minimal() + 
+  theme(legend.position = "bottom")
+```
+
+    ## Warning: Removed 17 rows containing missing values (`geom_point()`).
+
+![](visualization_part_2_files/figure-gfm/unnamed-chunk-9-1.png)<!-- -->
