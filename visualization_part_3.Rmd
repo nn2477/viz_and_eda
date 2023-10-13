@@ -202,4 +202,8 @@ weather_df %>%
   )
 ```
 
+## quick note
 
+summarize only gets you so far!! 
+  - if we wanted to ask: what is the regression for tmax and tmin for central park and waterhole -- hard problem to do with just summarize 
+  - summarize can only spit out single numbers 

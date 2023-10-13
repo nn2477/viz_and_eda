@@ -446,3 +446,10 @@ weather_df %>%
     ## 1 CentralPark_NY            12.2           4.43
     ## 2 Molokai_HI                 5.6           1.24
     ## 3 Waterhole_WA              11.1           3.04
+
+## quick note
+
+summarize only gets you so far!! - if we wanted to ask: what is the
+regression for tmax and tmin for central park and waterhole – hard
+problem to do with just summarize - summarize can only spit out single
+numbers
