@@ -212,3 +212,54 @@ weather_df %>%
 
 - in summarize, we have given it two things to summarize – created 2
   variables, \# of observations and \# of days
+
+## digression on 2x2 tables
+
+- `case_when` function: given this condition, use this output level
+- “~” in this case means when this is true, put whatever is in the
+  quotation mark into my cold variable
+
+``` r
+weather_df %>% 
+  drop_na(tmax) %>% 
+  filter(name != "Molokai_HI") %>% 
+  mutate(
+    cold = case_when(
+      tmax < 5 ~ "cold",
+      tmax >= 5 ~ "not_cold",
+      TRUE      ~ ""
+    )) %>% 
+  group_by(name, cold) %>% 
+  summarize(count = n()) 
+```
+
+    ## `summarise()` has grouped output by 'name'. You can override using the
+    ## `.groups` argument.
+
+    ## # A tibble: 4 × 3
+    ## # Groups:   name [2]
+    ##   name           cold     count
+    ##   <chr>          <chr>    <int>
+    ## 1 CentralPark_NY cold        96
+    ## 2 CentralPark_NY not_cold   634
+    ## 3 Waterhole_WA   cold       319
+    ## 4 Waterhole_WA   not_cold   395
+
+## creating 2x2 table without needing to manually do it
+
+``` r
+weather_df %>% 
+  drop_na(tmax) %>% 
+  filter(name != "Molokai_HI") %>% 
+  mutate(
+    cold = case_when(
+      tmax < 5 ~ "cold",
+      tmax >= 5 ~ "not_cold",
+      TRUE      ~ ""
+    )) %>% 
+  janitor::tabyl(name, cold)
+```
+
+    ##            name cold not_cold
+    ##  CentralPark_NY   96      634
+    ##    Waterhole_WA  319      395
