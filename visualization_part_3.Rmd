@@ -168,5 +168,38 @@ weather_df %>%
   knitr::kable(digits = 1)
 ```
 
+## `group_by` and `mutate`
+
+```{r}
+weather_df %>% 
+  group_by(name) %>% 
+  mutate(
+    mean_tmax = mean(tmax, na.rm = TRUE), 
+    center_tmax = tmax - mean_tmax
+  ) %>% 
+  ggplot(aes(x = date, y = center_tmax, color = name)) +
+  geom_point()
+```
+
+what about window functions?
+ranking 
+```{r}
+weather_df %>% 
+  group_by(name, month) %>% 
+  mutate(temp_rank = min_rank(tmax)) 
+```
+
+lag (shifts everything over by 1) 
+  - useful when you are looking at how one variable change from one day to the next
+
+```{r}
+weather_df %>% 
+  group_by(name) %>% 
+  mutate(temp_change = tmax - lag(tmax)) %>% 
+  summarise(
+    temp_change_max = max(temp_change, na.rm = TRUE),
+    temp_change_sd = sd(temp_change, na.rm = TRUE)
+  )
+```
 
 
